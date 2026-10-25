@@ -114,14 +114,11 @@
           ].join("\n")
         : "История команд пуста.",
 
-    about:
-      "AUTHOR PROFILE\n\nАвторский профиль пока не заполнен.",
+    about: "ABOUT THE AUTHOR\n\n{pause:800ms}Итак...{pause:800ms} ты решил узнать, кто всё это устроил?\n\n{pause:1000ms}Что ж, вполне справедливый вопрос.{pause:800ms}\n\nЯ{pause:300ms} автор этого проекта.{pause:500ms}\nСоздатель миров, персонажей и историй,\nкоторые ты найдёшь в этом архиве.\n\n{pause:900ms}Я не обещаю, что здесь найдутся ответы на все вопросы.\n{pause:800ms}Некоторые истории ещё не завершены.\n{pause:500ms}Некоторые сведения пока не предназначены для публикации.\n{pause:300ms}А некоторые вещи... {pause:700ms}просто требуют времени.\n\n{pause:1000ms}Я предпочитаю, чтобы персонажи говорили за себя.\nНо последнее слово о том, кем они являются,\n{pause:1500ms}всё-таки остаётся за мной.\n\n{pause:900ms}Впрочем, не принимай это за приглашение верить мне на слово.\nЧитай.{pause:400ms} Сопоставляй.{pause:400ms} Ищи противоречия.\n{pause:400ms}В конце концов, для этого архив и существует.\n\n{pause:1000ms}Ну а теперь...\nХватит знакомиться.\nВпереди ещё много интересного.",
 
-    links:
-      "EXTERNAL RESOURCES\n\nВнешние ссылки автора пока не добавлены.",
+    links: "EXTERNAL RESOURCES\n\n{pause:600ms}Ты ищешь другие точки входа?\n\n{pause:700ms}Я оставил для них отдельный канал.\nНо пока здесь нет ни одного опубликованного адреса.\n\n{pause:800ms}Когда появятся новые ресурсы,\nони будут добавлены в этот список.\n\n{pause:800ms}Connection directory: EMPTY.",
 
-    contact:
-      "CONTACT CHANNEL\n\nСпособы связи пока не указаны автором.",
+    contact: "CONTACT CHANNEL\n\n{pause:700ms}Хочешь связаться со мной?\n\n{pause:600ms}Что ж, я оставил тебе пару способов.\nВыбирай тот, который тебе удобнее.\n\n{pause:800ms}Discord — для общения.\nTelegram — тоже подойдёт.\n\n{pause:700ms}Только учти: наличие контакта\nещё не означает мгновенного ответа.\n\n{pause:800ms}Я отвечу как только смогу.",
 
     commandNotFound: command =>
       `COMMAND NOT FOUND: ${command}\n\nВведите help для просмотра публичных команд.`,
@@ -132,7 +129,7 @@
         "{pause:400ms}",
         "Инициализация терминала...",
         "{pause:450ms}",
-        "Проверка локального идентификатора: OK",
+        "Проверка локального идентификатора: исправно",
         "{pause:350ms}",
         "",
         "Соединение установлено.",
@@ -151,7 +148,10 @@
   // Пример:
   // { label: "GitHub", url: "https://github.com/username" }
 
-  const AUTHOR_LINKS = [];
+  const AUTHOR_LINKS = [
+    { label: "Discord: Heavenly_Strider", url: "https://discord.com/users/1141390972656308294" },
+    { label: "Telegram: @HeavenlyStrider", url: "https://t.me/HeavenlyStrider" }
+  ];
 
   // Секретные записи и условия их открытия пока не настроены.
   const SECRET_RECORDS = [];
@@ -690,8 +690,10 @@
             }
           : AUTHOR_CONTENT.links;
 
-      case "contact":
-        return AUTHOR_CONTENT.contact;
+      case "contact": return {
+        text: AUTHOR_CONTENT.contact,
+        links: AUTHOR_LINKS
+      };
 
       default:
         return AUTHOR_CONTENT.commandNotFound(command);

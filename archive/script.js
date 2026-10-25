@@ -300,7 +300,7 @@ function showCharacter(index) {
         fields.universe.textContent = character.universe;
 
         fields.recordCount.textContent =
-            `КОЛЛЕКЦИЯ ПЕРСОНАЖЕЙ · ${Number(character.id)} / ${String(characters.length).padStart(2, "0")}`;
+            `КОЛЛЕКЦИЯ ПЕРСОНАЖЕЙ · 0${Number(character.id)} / ${String(characters.length).padStart(2, "0")}`;
 
         fields.paletteName.textContent = character.paletteName;
         fields.paletteHex.textContent = character.paletteColor;
