@@ -694,3 +694,213 @@ h2 {
     color: var(--text);
     text-decoration-color: var(--text);
 }
+
+
+/* ===== Project Seven Sins: Identity Gate ===== */
+
+.identity-gate[hidden],
+.identity-gate section[hidden] {
+    display: none !important;
+}
+
+.identity-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: grid;
+    place-items: center;
+    overflow-y: auto;
+    padding: 24px;
+    background: rgba(3, 7, 4, 0.96);
+    color: #d5e5d4;
+    font-family: Consolas, "Courier New", monospace;
+}
+
+.identity-panel {
+    width: min(100%, 560px);
+    padding: clamp(22px, 5vw, 42px);
+    border: 1px solid #355b3b;
+    background: #0a100b;
+    box-shadow: 0 0 45px rgba(53, 120, 65, 0.12);
+}
+
+.identity-kicker {
+    color: #78a87a;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    overflow-wrap: anywhere;
+}
+
+.identity-status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 22px;
+    color: #92b594;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+}
+
+.identity-indicator {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+    background: #79d887;
+    box-shadow: 0 0 9px #79d887;
+}
+
+.identity-panel h2 {
+    margin: 24px 0 18px;
+    color: #e1eee0;
+    font-size: clamp(22px, 5vw, 30px);
+    font-weight: 500;
+    line-height: 1.25;
+}
+
+.identity-text {
+    color: #b4c4b4;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.identity-warning {
+    margin: 22px 0;
+    padding: 14px;
+    border-left: 2px solid #c4a65e;
+    background: rgba(196, 166, 94, 0.06);
+    color: #d5bc7d;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.identity-panel label {
+    display: block;
+    margin-bottom: 10px;
+    color: #91b995;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+}
+
+.identity-panel input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #355b3b;
+    border-radius: 0;
+    outline: none;
+    background: #060a07;
+    color: #d5e5d4;
+    font: inherit;
+    font-size: 16px;
+}
+
+.identity-panel input:focus {
+    border-color: #80b888;
+    box-shadow: 0 0 0 1px #80b888;
+}
+
+.identity-panel input::placeholder {
+    color: #607261;
+}
+
+.identity-hint {
+    color: #819282;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.identity-error {
+    min-height: 0;
+    color: #e18b7e;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.identity-button {
+    padding: 13px 16px;
+    border: 1px solid #5b9965;
+    border-radius: 0;
+    background: #18301d;
+    color: #d9eedb;
+    font: inherit;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: background 150ms ease, border-color 150ms ease;
+}
+
+.identity-button:hover {
+    border-color: #9bd3a3;
+    background: #24452b;
+}
+
+.identity-button:focus-visible {
+    outline: 2px solid #9bd3a3;
+    outline-offset: 3px;
+}
+
+#identity-form > .identity-button {
+    width: 100%;
+    margin-top: 12px;
+}
+
+.identity-selected {
+    margin: 20px 0;
+    padding: 16px;
+    border: 1px solid #355b3b;
+    background: #060a07;
+    color: #9fe5a8;
+    font-size: clamp(18px, 5vw, 24px);
+    overflow-wrap: anywhere;
+}
+
+.identity-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.identity-actions .identity-button {
+    flex: 1;
+    min-width: 0;
+}
+
+.identity-secondary {
+    border-color: #435047;
+    background: transparent;
+    color: #aab9ac;
+}
+
+.identity-footer {
+    margin-top: 32px;
+    color: #536a56;
+    font-size: 9px;
+    line-height: 1.8;
+    letter-spacing: 0.08em;
+    overflow-wrap: anywhere;
+}
+
+.identity-footer span {
+    color: #a38e55;
+}
+
+@media (max-width: 420px) {
+    .identity-gate {
+        padding: 12px;
+    }
+
+    .identity-panel {
+        padding: 22px 18px;
+    }
+
+    .identity-actions {
+        flex-direction: column-reverse;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .identity-button {
+        transition: none;
+    }
+}

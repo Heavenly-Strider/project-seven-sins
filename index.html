@@ -103,7 +103,7 @@
           <span class="card-arrow" aria-hidden="true">→</span>
         </a>
 
-        <a class="nav-card" href="about/index.html">
+        <a class="nav-card" href="author/index.html">
           <span class="card-number">04</span>
           <span class="card-icon" aria-hidden="true">¶</span>
           <span class="card-content">
@@ -139,5 +139,98 @@
       </a>
     </span>
   </footer>
+  
+<!-- Identity registration -->
+<div class="identity-gate" id="identity-gate" hidden>
+    <div class="identity-panel" role="dialog"
+         aria-modal="true" aria-labelledby="identity-title">
+
+        <div class="identity-kicker">PSS // IDENTIFICATION PROTOCOL</div>
+        <div class="identity-status">
+            <span class="identity-indicator"></span>
+            SYSTEM ACCESS RESTRICTED
+        </div>
+
+        <section id="identity-entry">
+            <h2 id="identity-title">Идентификация пользователя</h2>
+
+            <p class="identity-text">
+                Для получения доступа к системе необходимо назначить
+                персональный идентификатор.
+            </p>
+
+            <p class="identity-warning">
+                ВНИМАНИЕ: после подтверждения изменить идентификатор
+                через интерфейс сайта будет невозможно.
+            </p>
+
+            <form id="identity-form">
+                <label for="identity-username">USER IDENTIFIER</label>
+                <input
+                    id="identity-username"
+                    name="username"
+                    type="text"
+                    placeholder="Введите юзернейм"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    required
+                >
+
+                <p class="identity-hint">
+                    Допустимы только латинские буквы и дефисы.
+                    Без пробелов, цифр и символов.
+                </p>
+
+                <p class="identity-error" id="identity-error"
+                   aria-live="polite"></p>
+
+                <button class="identity-button" type="submit">
+                    ПРОДОЛЖИТЬ
+                </button>
+            </form>
+        </section>
+
+        <section id="identity-confirm" hidden>
+            <h2>Подтверждение идентификатора</h2>
+
+            <p class="identity-text">
+                Система присвоит вам следующий идентификатор:
+            </p>
+
+            <div class="identity-selected" id="identity-selected"></div>
+
+            <p class="identity-warning">
+                Проверьте написание. После подтверждения интерфейс
+                сайта не позволит изменить выбранное имя.
+            </p>
+
+            <p class="identity-hint">
+                Имя хранится в данных этого браузера. Очистка данных
+                сайта может сбросить регистрацию.
+            </p>
+
+            <p class="identity-error" id="identity-confirm-error"
+               aria-live="polite"></p>
+
+            <div class="identity-actions">
+                <button class="identity-button identity-secondary"
+                        id="identity-back" type="button">
+                    НАЗАД
+                </button>
+
+                <button class="identity-button"
+                        id="identity-finalize" type="button">
+                    ПОДТВЕРЖДАЮ
+                </button>
+            </div>
+        </section>
+
+        <div class="identity-footer">
+            PROJECT SEVEN SINS <span>·</span> UNAUTHORIZED ACCESS DENIED
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
