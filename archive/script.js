@@ -1,3 +1,4 @@
+/* Формирует архив персонажей и обработку фильтров архива. */
 
 const characters = [
     {
@@ -12,7 +13,7 @@ const characters = [
 
         universe: "Острейя представляет собой остров, окружённый необъятным океаном. Над островом простирается облачная гладь, представляющая собой пустыню из осязаемых облаков. Вокруг неё расположена грозовая пустошь, область гроз и опасности. Остров и облачную гладь соединяет Предел, физический пик, имеющий особое значение для устройства мира.",
 
-        paletteName: "СЛОНОВАЯ КОСТЬ · ПРИГЛУШЁННОЕ ЗОЛОТО",
+        paletteName: "ПРИГЛУШЁННОЕ ЗОЛОТО",
         paletteColor: "#D6C7A0",
 
         theme: {
@@ -127,7 +128,7 @@ const characters = [
     {
         id: "005",
         name: "Ристо Каарель",
-        alias: "Drift",
+        alias: "Дрифт",
         sin: "Лень",
 
         appearance: "Описание пока не добавлено.",
@@ -158,7 +159,7 @@ const characters = [
     {
         id: "006",
         name: "Лалиет Веренс",
-        alias: "Collector",
+        alias: "Коллектор",
         sin: "Жадность",
 
         appearance: "Описание пока не добавлено.",
@@ -189,7 +190,7 @@ const characters = [
     {
         id: "007",
         name: "Кайден Роуэн",
-        alias: "Hollowbite",
+        alias: "Холлоубайт",
         sin: "Чревоугодие",
 
         appearance: "Описание пока не добавлено.",
@@ -242,6 +243,7 @@ const root = document.documentElement;
 let animationTimer = null;
 let currentIndex = -1;
 
+// Применяет цветовую тему выбранного персонажа.
 function applyTheme(theme) {
     const variables = {
         "--background": theme.background,
@@ -263,6 +265,7 @@ function applyTheme(theme) {
     });
 }
 
+// Обновляет карточку и данные выбранного персонажа.
 function showCharacter(index) {
     const character = characters[index];
 
@@ -271,10 +274,10 @@ function showCharacter(index) {
     clearTimeout(animationTimer);
     currentIndex = index;
 
-    // Переключаем цветовую тему одновременно с анимацией досье.
+    // Переключение цветовой темы одновременно с анимацией досье
     applyTheme(character.theme);
 
-    // Обновляем выбранную кнопку.
+    // Обновление выбранной кнопки
     buttons.forEach((button, buttonIndex) => {
         const isActive = buttonIndex === index;
 
@@ -282,11 +285,11 @@ function showCharacter(index) {
         button.setAttribute("aria-pressed", String(isActive));
     });
 
-    // Плавно скрываем старое содержимое.
+    // Плавное сокрытие старого содержимого
     dossier.classList.add("switching");
 
     animationTimer = setTimeout(() => {
-        // Проверяем, что за время анимации не выбрали другого персонажа.
+        // Проверка того факта, что за время анимации не выбрали другого персонажа
         if (currentIndex !== index) return;
 
         fields.id.textContent = `SUBJECT №${character.id}`;
@@ -312,7 +315,7 @@ function showCharacter(index) {
 
         dossier.classList.remove("switching");
 
-        // Длинное досье начинается с заголовка.
+        // Длинное досье начинается с заголовка
         document.querySelector(".details").scrollTop = 0;
     }, 180);
 }
@@ -324,5 +327,5 @@ buttons.forEach((button) => {
     });
 });
 
-// Загружаем первого персонажа при открытии архива.
+// Загрузка первого персонажа при открытии архива
 showCharacter(0);

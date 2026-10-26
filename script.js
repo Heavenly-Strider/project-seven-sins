@@ -1,43 +1,32 @@
+/* Показывает ссылку «Продолжить чтение» по сохранённому прогрессу. */
 
-const upcomingPages = {
-  "reading/index.html": "Раздел чтения ещё не создан.",
-  "contents/index.html": "Содержание книги пока готовится.",
-  "about/index.html": "Страница об авторе появится позже."
-};
+/* Reading progress is managed by reading/script.js and the shared materials list. */
+// Ключ должен совпадать с ключом прогресса в reading/script.js.
+const PSS_PROGRESS_KEY = "pss_reading_furthest_v1";
+const continueWrap = document.getElementById("continue-reading-wrap");
+const continueLink = document.getElementById("continue-reading");
+const continueNote = document.getElementById("continue-reading-note");
 
-let noticeTimer;
-
-document.querySelectorAll(".nav-card").forEach((card) => {
-  card.addEventListener("click", (event) => {
-    const destination = card.getAttribute("href");
-
-    if (!upcomingPages[destination]) {
-      return;
+if (continueWrap && continueLink) {
+  try {
+    const progress = JSON.parse(localStorage.getItem(PSS_PROGRESS_KEY) || "null");
+    if (progress && typeof progress.id === "string") {
+      // Resolve the saved ID against the current material list, which avoids trusting stale URLs.
+      const script = document.createElement("script");
+      script.src = "reading/materials.js";
+      script.onload = () => {
+        const materials = Array.isArray(window.PSS_MATERIALS) ? window.PSS_MATERIALS : [];
+        const index = materials.findIndex(item => item && item.id === progress.id);
+        if (index < 0) return;
+        continueLink.href = `reading/index.html?id=${encodeURIComponent(progress.id)}`;
+        continueWrap.hidden = false;
+        if (continueNote) continueNote.textContent = `Позиция ${index + 1} из ${materials.length}: ${materials[index].title}`;
+      };
+      document.head.appendChild(script);
     }
-
-    event.preventDefault();
-    showNotice(upcomingPages[destination]);
-  });
-});
-
-function showNotice(message) {
-  let notice = document.querySelector(".site-notice");
-
-  if (!notice) {
-    notice = document.createElement("div");
-    notice.className = "site-notice";
-    notice.setAttribute("role", "status");
-    document.body.appendChild(notice);
+  } catch (error) {
+    console.warn("Не удалось прочитать сохранённый прогресс:", error);
   }
-
-  notice.textContent = message;
-  notice.classList.add("visible");
-
-  clearTimeout(noticeTimer);
-
-  noticeTimer = setTimeout(() => {
-    notice.classList.remove("visible");
-  }, 2800);
 }
 
 
@@ -72,6 +61,7 @@ if (siteBackButton) {
     const STORAGE_KEY = "pss_identity_username_v1";
     const USERNAME_PATTERN = /^[A-Za-z]+(?:-[A-Za-z]+)*$/;
 
+    // Показывает или скрывает стартовый экран сайта.
     function initializeIdentityGate() {
         const gate = document.getElementById("identity-gate");
 

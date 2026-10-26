@@ -1,16 +1,11 @@
+/* Управляет терминалом автора, его командами и выводом сообщений. */
+
 "use strict";
 
-/*
- * PROJECT SEVEN SINS: Author Terminal
- * Replace author/script.js with this file.
- * All command response texts are grouped in AUTHOR_CONTENT.
- */
+/* PROJECT SEVEN SINS: Author Terminal */
 
 (() => {
-  // ---------------------------------------------------------------------------
-  // НАСТРОЙКИ
-  // ---------------------------------------------------------------------------
-
+// Настройки
   const CONFIG = {
     charDelay: 30,
     defaultPause: 500,
@@ -19,11 +14,9 @@
     punctuationPause: 90,
     clockInterval: 1000
   };
+// Тексты терминала
+  // Редактирование команд, приветствия и описания.
 
-  // ---------------------------------------------------------------------------
-  // ТЕКСТЫ ТЕРМИНАЛА
-  // Редактируй здесь ответы команд, приветствие и описания.
-  // ---------------------------------------------------------------------------
 
   const AUTHOR_CONTENT = {
     help: [
@@ -139,12 +132,8 @@
         "Введите help для просмотра публичных команд."
       ].join("\n")
   };
-
-  // ---------------------------------------------------------------------------
-  // ССЫЛКИ И СЕКРЕТНЫЕ ЗАПИСИ
-  // ---------------------------------------------------------------------------
-
-  // Добавляй сюда только реальные ссылки.
+// Ссылки и секретные записи
+  // Только реальные ссылки.
   // Пример:
   // { label: "GitHub", url: "https://github.com/username" }
 
@@ -155,11 +144,7 @@
 
   // Секретные записи и условия их открытия пока не настроены.
   const SECRET_RECORDS = [];
-
-  // ---------------------------------------------------------------------------
-  // HTML-ЭЛЕМЕНТЫ
-  // ---------------------------------------------------------------------------
-
+// Html-элементы
   const output = document.getElementById("terminal-output");
   const form = document.getElementById("terminal-form");
   const input = document.getElementById("terminal-input");
@@ -181,11 +166,7 @@
     );
     return;
   }
-
-  // ---------------------------------------------------------------------------
-  // ЛОКАЛЬНЫЕ ДАННЫЕ
-  // ---------------------------------------------------------------------------
-
+// Локальные данные
   const STORAGE = {
     username: "pss_identity_username_v1",
     secrets: "pss_author_secrets_v1"
@@ -201,6 +182,7 @@
   let instantMode = false;
   let runId = 0;
 
+  // Получает имя посетителя из локального состояния.
   function getUsername() {
     try {
       const value = localStorage.getItem(STORAGE.username);
@@ -213,6 +195,7 @@
     }
   }
 
+  // Загружает состояние скрытых записей терминала.
   function getSecretState() {
     try {
       const value = localStorage.getItem(STORAGE.secrets);
@@ -237,6 +220,7 @@
     }
   }
 
+  // Сохраняет состояние скрытых записей в браузере.
   function saveSecretState(state) {
     try {
       localStorage.setItem(
@@ -253,11 +237,7 @@
   const username = getUsername();
 
   usernameElement.textContent = username;
-
-  // ---------------------------------------------------------------------------
-  // ВЫВОД ТЕКСТА
-  // ---------------------------------------------------------------------------
-
+// Вывод текста
   function scrollToBottom() {
     output.scrollTop = output.scrollHeight;
   }
@@ -277,6 +257,7 @@
     return line;
   }
 
+  // Добавляет строку в вывод терминала.
   function appendPlainText(text, className = "") {
     for (const part of String(text).split("\n")) {
       const line = makeLine(className);
@@ -326,11 +307,7 @@
   function clearScreen() {
     output.replaceChildren();
   }
-
-  // ---------------------------------------------------------------------------
-  // ПАУЗЫ И ЭФФЕКТ ПЕЧАТИ
-  // ---------------------------------------------------------------------------
-
+// Паузы и эффект печати
   function wait(ms, thisRun) {
     return new Promise(resolve => {
       if (thisRun !== runId) {
@@ -405,6 +382,7 @@
     );
   }
 
+  // Разбирает введённую команду на имя и аргументы.
   function tokenize(text) {
     const tokens = [];
 
@@ -455,6 +433,7 @@
     return tokens;
   }
 
+  // Печатает текст с задержками, имитируя вывод терминала.
   async function renderText(text, thisRun, className = "") {
     for (const token of tokenize(text)) {
       if (thisRun !== runId) return;
@@ -600,11 +579,7 @@
       }
     }
   }
-
-  // ---------------------------------------------------------------------------
-  // КОМАНДЫ
-  // ---------------------------------------------------------------------------
-
+// Команды
   const PUBLIC_COMMANDS = [
     "help",
     "whoami",
@@ -621,6 +596,7 @@
     "contact"
   ];
 
+  // Подбирает ответ терминала для введённой команды.
   function getResponse(command, args) {
     const state = getSecretState();
 
@@ -715,6 +691,7 @@
     line.append(prompt, entered);
   }
 
+  // Проверяет и выполняет команду пользователя.
   async function executeCommand(raw) {
     const normalized = raw.trim().replace(/\s+/g, " ");
 
@@ -742,17 +719,13 @@
 
     input.focus();
   }
-
-  // ---------------------------------------------------------------------------
-  // ВВОД КОМАНД И ИСТОРИЯ
-  // ---------------------------------------------------------------------------
-
+// Ввод команд и история
   form.addEventListener("submit", event => {
     event.preventDefault();
 
     if (isPrinting) {
-      // Первый Enter завершает текущую печать.
-      // Введённая команда сохраняется и не выполняется.
+      // Первый Enter завершает текущую печать
+      // Введённая команда сохраняется и не выполняется
       requestFinish();
       return;
     }
@@ -789,11 +762,8 @@
         commandHistory[historyPosition] || "";
     }
   });
-
-  // ---------------------------------------------------------------------------
-  // ЧАСЫ
-  // ---------------------------------------------------------------------------
-
+// Часы
+  // Обновляет часы в интерфейсе терминала.
   function updateClock() {
     if (!clockElement) return;
 
@@ -812,11 +782,8 @@
     updateClock,
     CONFIG.clockInterval
   );
-
-  // ---------------------------------------------------------------------------
-  // ЗАПУСК ТЕРМИНАЛА
-  // ---------------------------------------------------------------------------
-
+// Запуск терминала
+  // Запускает начальную последовательность терминала.
   async function boot() {
     input.disabled = false;
     submit.disabled = false;
