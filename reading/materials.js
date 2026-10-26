@@ -19,12 +19,12 @@ window.PSS_MATERIALS = [
     subtitle: ""
   },
   {
-    id: "sloth-chapter-001",
-    order: 2,
+    id: "sloth-chapter-003",
+    order: 3,
     type: "chapter",
-    title: "Глава III. Искусство ничего не делать",
+    title: "Глава III. Инструкция по ничегонеделанию",
     sin: "Лень",
-    path: "chapters/sloth-chapter-001.txt",
-    subtitle: ""
+    path: "chapters/sloth-chapter-003.txt",
+    subtitle: "Демонстрационная глава: синтаксис, декоративные блоки и важные предупреждения."
   }
 ];

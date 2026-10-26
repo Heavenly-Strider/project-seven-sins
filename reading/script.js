@@ -81,10 +81,11 @@
     });
     text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
     text = text.replace(/\/\/([^/]+)\/\//g, '<em>$1</em>');
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
     return text;
   }
 
-  // Преобразует строки главы в абзацы, заголовки, списки и цитаты.
+  // Преобразует текст главы в HTML, включая декоративные блоки.
   function parseChapter(source) {
     const lines = String(source || '').replace(/\r/g, '').split('\n');
     const output = [];
@@ -104,30 +105,115 @@
       if (quote.length) output.push(`<blockquote><p>${quote.map(parseInline).join('<br>')}</p></blockquote>`);
       quote = [];
     };
+    const flushText = () => {
+      flushParagraph();
+      flushList();
+      flushQuote();
+    };
 
-    for (const rawLine of lines) {
+    // Собирает содержимое декоративного блока до закрывающей строки :::.
+    function readBlock(startIndex) {
+      const header = lines[startIndex].trim().match(/^:::\s*(dark|light|frame|file|dossier)\s*$/i);
+      if (!header) return null;
+      const type = header[1].toLowerCase();
+      const blockLines = [];
+      let endIndex = startIndex + 1;
+      while (endIndex < lines.length && lines[endIndex].trim() !== ':::') {
+        blockLines.push(lines[endIndex]);
+        endIndex++;
+      }
+      return { type, lines: blockLines, nextIndex: endIndex < lines.length ? endIndex + 1 : endIndex };
+    }
+
+    // Проверяет, что путь изображения локальный и не выходит за пределы сайта.
+    function safeImagePath(value) {
+      const path = String(value || '').trim();
+      if (!path || /^(?:[a-z]+:|\/|\\)/i.test(path) || path.split('/').includes('..') || path.includes('\\')) return '';
+      if (!/\.(?:avif|gif|jpe?g|png|webp)$/i.test(path)) return '';
+      return path;
+    }
+
+    // Создаёт досье с фиксированной областью фотографии и текстовыми полями.
+    function renderDossier(blockLines) {
+      let photo = '';
+      let name = '';
+      let alias = '';
+      const fields = [];
+      const bodyLines = [];
+      let inBody = false;
+
+      for (const rawLine of blockLines) {
+        const line = rawLine.trim();
+        if (!inBody && line === '---') {
+          inBody = true;
+          continue;
+        }
+        if (inBody) {
+          bodyLines.push(rawLine);
+          continue;
+        }
+        const field = line.match(/^(photo|name|alias|field)\s*=\s*(.*)$/i);
+        if (!field) {
+          if (line) bodyLines.push(rawLine);
+          continue;
+        }
+        const key = field[1].toLowerCase();
+        const value = field[2].trim();
+        if (key === 'photo') photo = safeImagePath(value);
+        if (key === 'name') name = value;
+        if (key === 'alias') alias = value;
+        if (key === 'field') {
+          const parts = value.split('|');
+          if (parts.length >= 2 && parts[0].trim()) fields.push([parts[0].trim(), parts.slice(1).join('|').trim()]);
+        }
+      }
+
+      const portrait = photo
+        ? `<div class="chapter-dossier-photo"><img src="${escapeHtml(photo)}" alt="${escapeHtml(name || 'Портрет')}" loading="lazy"></div>`
+        : '<div class="chapter-dossier-photo chapter-dossier-photo-empty"><span>NO IMAGE</span></div>';
+      const identity = [name ? `<h3>${parseInline(name)}</h3>` : '', alias ? `<p class="chapter-dossier-alias">${parseInline(alias)}</p>` : ''].join('');
+      const fieldMarkup = fields.map(([label, value]) => `<div class="chapter-dossier-field"><dt>${parseInline(label)}</dt><dd>${parseInline(value)}</dd></div>`).join('');
+      const body = bodyLines.length ? `<div class="chapter-dossier-body">${parseChapter(bodyLines.join('\n'))}</div>` : '';
+      return `<section class="chapter-block chapter-block-dossier"><div class="chapter-dossier-top">${portrait}<div class="chapter-dossier-identity">${identity}${fieldMarkup ? `<dl class="chapter-dossier-fields">${fieldMarkup}</dl>` : ''}</div></div>${body}</section>`;
+    }
+
+    for (let index = 0; index < lines.length; index++) {
+      const rawLine = lines[index];
       const line = rawLine.trim();
       if (!line) {
-        flushParagraph();
-        flushList();
-        flushQuote();
+        flushText();
         continue;
       }
+
+      const block = readBlock(index);
+      if (block) {
+        flushText();
+        if (block.type === 'dossier') {
+          output.push(renderDossier(block.lines));
+        } else {
+          const className = `chapter-block chapter-block-${block.type}`;
+          output.push(`<section class="${className}">${parseChapter(block.lines.join('\n'))}</section>`);
+        }
+        index = block.nextIndex - 1;
+        continue;
+      }
+
       const heading = line.match(/^(={1,3})\s*(.*?)\s*\1$/);
       if (heading) {
-        flushParagraph(); flushList(); flushQuote();
+        flushText();
         const level = Math.min(heading[1].length + 1, 4);
         output.push(`<h${level}>${parseInline(heading[2])}</h${level}>`);
         continue;
       }
       if (/^----+$/.test(line)) {
-        flushParagraph(); flushList(); flushQuote();
+        flushText();
         output.push('<hr>');
         continue;
       }
       const listItem = line.match(/^([*#])\s+(.+)$/);
       if (listItem) {
-        flushParagraph(); flushQuote();
+        flushParagraph();
+        flushQuote();
         const nextType = listItem[1] === '*' ? 'ul' : 'ol';
         if (listType !== nextType) {
           flushList();
@@ -138,7 +224,8 @@
         continue;
       }
       if (line.startsWith('> ')) {
-        flushParagraph(); flushList();
+        flushParagraph();
+        flushList();
         quote.push(line.slice(2));
         continue;
       }
@@ -146,7 +233,7 @@
       flushQuote();
       paragraph.push(line);
     }
-    flushParagraph(); flushList(); flushQuote();
+    flushText();
     return output.join('\n');
   }
 
