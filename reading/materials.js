@@ -17,5 +17,14 @@ window.PSS_MATERIALS = [
     sin: "Гнев",
     path: "chapters/wrath-chapter-001.txt",
     subtitle: ""
+  },
+  {
+    id: "sloth-chapter-001",
+    order: 2,
+    type: "chapter",
+    title: "Глава III. Искусство ничего не делать",
+    sin: "Лень",
+    path: "chapters/sloth-chapter-001.txt",
+    subtitle: ""
   }
 ];
