@@ -4,6 +4,34 @@
     en: {
       "ЦЕНТРАЛЬНЫЙ АРХИВ": "CENTRAL ARCHIVE",
       "ЦЕНТРАЛЬНЫЙ АРХИВ · VII": "CENTRAL ARCHIVE · VII",
+      "ЦЕНТРАЛЬНОЕ ХРАНИЛИЩЕ / VII": "CENTRAL REPOSITORY / VII",
+      "ДЕЛО № 2409 · СТАТУС: НЕ ЗАКРЫТО": "CASE NO. 2409 · STATUS: OPEN",
+      "Семь субъектов. Семь миров.": "Seven subjects. Seven worlds.",
+      "Происхождение взаимосвязи не установлено.": "The origin of their connection remains unknown.",
+      "Доступные материалы содержат свидетельства о семи отдельных реальностях. Их обитатели, события и законы существования различаются. Однако архив объединяет их в единую коллекцию. Основание для этого решения пока не раскрыто.": "The available materials contain evidence of seven separate realities. Their inhabitants, events, and laws of existence differ. Yet the archive brings them together in a single collection. The reason for this decision remains undisclosed.",
+      "ПРИМЕЧАНИЕ": "NOTE",
+      "Содержание архива может быть неполным.": "The archive may be incomplete.",
+      "01 / НАВИГАЦИЯ": "01 / NAVIGATION",
+      "04 РАЗДЕЛА": "04 SECTIONS",
+      "ИЗ АРХИВНОГО ЖУРНАЛА": "FROM THE ARCHIVE LOG",
+      "ЗАПИСЬ 000 / VII": "ENTRY 000 / VII",
+      "Не все записи обязаны быть связаны между собой. По крайней мере, до тех пор, пока не обнаружена связь.": "Not all records need to be connected. At least, not until a connection is found.",
+      "ЦЕНТРАЛЬНЫЙ АРХИВ": "CENTRAL ARCHIVE",
+      "ARCHIVE AVAILABLE": "ARCHIVE AVAILABLE",
+      "PSS // END OF EXTRACT": "PSS // END OF EXTRACT",
+      "Для получения доступа к системе необходимо назначить персональный идентификатор.": "To access the system, you must assign a personal identifier.",
+      "ВНИМАНИЕ: после подтверждения изменить идентификатор через интерфейс сайта будет невозможно.": "WARNING: once confirmed, the identifier cannot be changed through the website interface.",
+      "USER IDENTIFIER": "USER IDENTIFIER",
+      "Введите юзернейм": "Enter username",
+      "Допустимы только латинские буквы и дефисы. Без пробелов, цифр и символов.": "Only Latin letters and hyphens are allowed. No spaces, digits, or other symbols.",
+      "ПРОДОЛЖИТЬ": "CONTINUE",
+      "Подтверждение идентификатора": "Confirm identifier",
+      "Система присвоит вам следующий идентификатор:": "The system will assign you the following identifier:",
+      "Проверьте написание. После подтверждения интерфейс сайта не позволит изменить выбранное имя.": "Check the spelling. After confirmation, the website will not let you change the chosen name.",
+      "Имя хранится в данных этого браузера. Очистка данных сайта может сбросить регистрацию.": "The name is stored in this browser. Clearing site data may reset registration.",
+      "НАЗАД": "BACK",
+      "ПОДТВЕРЖДАЮ": "CONFIRM",
+      "UNAUTHORIZED ACCESS DENIED": "UNAUTHORIZED ACCESS DENIED",
       "СОДЕРЖАНИЕ АРХИВА": "ARCHIVE CONTENTS",
       "ПОСЛЕДОВАТЕЛЬНОЕ ЧТЕНИЕ": "READING SEQUENCE",
       "АВТОРСКИЙ ТЕРМИНАЛ": "AUTHOR TERMINAL",
@@ -77,7 +105,8 @@
       const original = node.__pssOriginalText;
       const trimmed = original.trim();
       if (!trimmed) return;
-      const translated = dictionary[trimmed];
+      const normalized = trimmed.replace(/\s+/g, " ");
+      const translated = dictionary[normalized] || dictionary[trimmed];
       if (translated) {
         const start = original.match(/^\s*/)?.[0] || "";
         const end = original.match(/\s*$/)?.[0] || "";
@@ -117,18 +146,14 @@
   }
 
   function addLanguageMenu() {
-    // Главная страница остаётся без переключателя языка.
-    if (document.querySelector(".navigation-grid") || document.querySelector(".language-control")) return;
+    // Не добавляем меню повторно, если оно уже присутствует на странице.
+    if (document.querySelector(".language-control")) return;
     const control = document.createElement("div");
     control.className = "language-control";
     const configScript = document.querySelector('script[src$="site-config.js"]');
     const configPath = configScript ? configScript.getAttribute("src") : "site-config.js";
     const prefix = configPath.slice(0, configPath.lastIndexOf("/") + 1);
-    const pagePath = window.location.pathname;
-    // В архиве 0.6 есть три копии сайта с разным расположением страницы перевода.
-    const guidePath = pagePath.includes("/contents/") || pagePath.includes("/translation/")
-      ? `${prefix}translation/index.html`
-      : `${prefix}translation/translation/index.html`;
+    const guidePath = `${prefix}translation/index.html`;
     control.innerHTML = `
       <button class="language-toggle" type="button" aria-expanded="false" aria-controls="pss-language-menu">Язык: Русский</button>
       <div class="language-menu" id="pss-language-menu" hidden>

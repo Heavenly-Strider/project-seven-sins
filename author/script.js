@@ -2,7 +2,7 @@
 
 "use strict";
 
-/* PROJECT SEVEN SINS: Author Terminal */
+/* Терминал автора Project Seven Sins. */
 
 (() => {
 // Настройки

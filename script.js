@@ -1,6 +1,4 @@
 /* Показывает ссылку «Продолжить чтение» по сохранённому прогрессу. */
-
-/* Reading progress is managed by reading/script.js and the shared materials list. */
 // Ключ должен совпадать с ключом прогресса в reading/script.js.
 const PSS_PROGRESS_KEY = "pss_reading_furthest_v1";
 const continueWrap = document.getElementById("continue-reading-wrap");
@@ -11,7 +9,6 @@ if (continueWrap && continueLink) {
   try {
     const progress = JSON.parse(localStorage.getItem(PSS_PROGRESS_KEY) || "null");
     if (progress && typeof progress.id === "string") {
-      // Resolve the saved ID against the current material list, which avoids trusting stale URLs.
       const script = document.createElement("script");
       script.src = "reading/materials.js";
       script.onload = () => {
@@ -55,7 +52,7 @@ if (siteBackButton) {
 }
 
 
-/* ===== Project Seven Sins: Identity Registration ===== */
+/* ===== Регистрация пользователя Project Seven Sins ===== */
 
 (() => {
     const STORAGE_KEY = "pss_identity_username_v1";
@@ -80,7 +77,7 @@ if (siteBackButton) {
 
         let pendingUsername = "";
 
-        // Повторное посещение: используем ранее сохранённое имя.
+        // Повторное посещение: использование ранее сохранённого имени.
         try {
             const savedUsername = localStorage.getItem(STORAGE_KEY);
 
@@ -134,8 +131,6 @@ if (siteBackButton) {
 
             try {
                 localStorage.setItem(STORAGE_KEY, pendingUsername);
-
-                // Закрываем регистрацию только после успешного сохранения.
                 gate.remove();
                 document.body.style.overflow = "";
             } catch (storageError) {

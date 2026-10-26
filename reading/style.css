@@ -39,7 +39,7 @@
 .language-choice[aria-pressed="true"]{border-color:var(--accent,#c6ccd2);background:var(--panel-hover,#191d21)}
 @media(max-width:600px){.language-control{width:calc(100% - 28px);justify-content:flex-start}.language-menu{left:0;right:auto;max-width:calc(100vw - 28px)}}
 
-/* v0.7: dossier portrait keeps a 3:4 frame even when photo is omitted. */
+/* Версия 0.8: портрет досье сохраняет пропорции 3:4 даже без фотографии. */
 .chapter-dossier-photo{width:min(100%,190px);aspect-ratio:3/4;height:auto;min-height:0;max-height:none;overflow:hidden;display:grid;place-items:center;}
 .chapter-dossier-photo img{display:block;width:100%;height:100%;min-height:0;object-fit:cover;object-position:center;}
 .chapter-dossier-photo-empty{border:1px solid var(--border);background:linear-gradient(145deg,var(--panel-light),var(--bg));color:var(--muted);font:10px/1.5 Consolas,monospace;letter-spacing:.12em;text-align:center;}
@@ -47,6 +47,6 @@
 .reader-paper code{padding:.08em .32em;border:1px solid var(--border);background:var(--panel-light);font: .9em Consolas,monospace;overflow-wrap:anywhere;}
 @media(max-width:520px){.chapter-dossier-photo{width:min(100%,190px);aspect-ratio:3/4;max-height:none;}}
 
-/* v0.7: keep translator navigation and content on the same centered axis. */
+/* Навигация и содержимое инструкции для переводчиков выровнены по одной центральной оси. */
 .translation-shell .reader-nav{display:flex;width:100%;max-width:760px;margin:0 auto;box-sizing:border-box;}
 .translation-shell .translation-content{display:block;width:100%;max-width:760px;margin:28px auto;box-sizing:border-box;}
