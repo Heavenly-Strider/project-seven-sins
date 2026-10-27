@@ -1,5 +1,5 @@
 // Единственная настройка версии сайта. Меняется только здесь.
-window.PSS_CONFIG = { version: "1.0" };
+window.PSS_CONFIG = { version: "1.1" };
 
 // Номер версии выводится исключительно в футерах.
 document.addEventListener("DOMContentLoaded", () => {
