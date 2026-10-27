@@ -150,6 +150,8 @@
     if (document.querySelector(".language-control")) return;
     const control = document.createElement("div");
     control.className = "language-control";
+    const isArchivePage = Boolean(document.querySelector(".archive"));
+    if (isArchivePage) control.classList.add("language-control-archive");
     const configScript = document.querySelector('script[src$="site-config.js"]');
     const configPath = configScript ? configScript.getAttribute("src") : "site-config.js";
     const prefix = configPath.slice(0, configPath.lastIndexOf("/") + 1);
@@ -162,8 +164,10 @@
         <a class="translation-guide-link" href="${guidePath}">Инструкция по переводу</a>
       </div>
     `;
+    const archiveHeader = isArchivePage ? document.querySelector(".archive .content > .topbar") : null;
     const header = document.querySelector("body > header, body > .topbar, body > main > header");
-    if (header) header.insertAdjacentElement("afterend", control);
+    if (archiveHeader) archiveHeader.append(control);
+    else if (header) header.insertAdjacentElement("afterend", control);
     else {
       const main = document.querySelector("body > main");
       if (main) main.insertAdjacentElement("beforebegin", control);
@@ -174,13 +178,16 @@
       style.id = "pss-language-control-style";
       style.textContent = `
         .language-control{position:relative;z-index:30;display:flex;align-items:center;justify-content:flex-end;gap:6px;width:min(1080px,calc(100% - 40px));margin:8px auto 0;font:10px/1.5 Consolas,"Courier New",monospace;color:var(--muted,#aab1b8);box-sizing:border-box}
+        .language-control-archive{flex:0 0 auto;width:auto;max-width:100%;margin:0;}
+        .language-control-archive .language-toggle{white-space:nowrap;padding:7px 9px;font-size:9px;}
+        .archive .content > .topbar{flex-wrap:wrap;}
         .language-toggle,.language-choice{padding:8px 11px;border:1px solid var(--border-bright,var(--border,#454c53));background:var(--panel,#171a1e);color:var(--text,#e7e9eb);font:inherit;cursor:pointer}
         .language-toggle:hover,.language-choice:hover{border-color:var(--accent,#d6c7a0)}
         .language-menu{position:absolute;top:calc(100% + 6px);right:0;bottom:auto;z-index:100;display:grid;gap:0;min-width:180px;max-width:calc(100vw - 28px);padding:6px;border:1px solid var(--border-bright,var(--border,#343a40));background:var(--panel,#171a1e);box-shadow:0 10px 24px rgba(0,0,0,.3)}
         .language-menu[hidden]{display:none}.language-choice,.language-control .translation-guide-link{display:block;width:100%;padding:9px 10px;border:0;background:transparent;color:var(--text,#e7e9eb);font:inherit;text-align:left;text-decoration:none;cursor:pointer;box-sizing:border-box}
         .language-choice[aria-pressed="true"]{color:var(--accent,#d6c7a0)}.language-choice:hover,.language-control .translation-guide-link:hover{background:var(--panel-hover,#242a30);color:var(--accent,#d6c7a0)}
         .language-control .translation-guide-link{margin-top:5px;border-top:1px solid var(--border,#343a40);padding-top:12px}
-        @media(max-width:600px){.language-control{width:calc(100% - 28px);margin-top:8px}.language-menu{left:auto;right:0}}
+        @media(max-width:600px){.language-control{width:calc(100% - 28px);margin-top:8px}.language-menu{left:auto;right:0}.language-control-archive{width:auto;margin:0}.archive .content > .topbar{gap:8px}.language-control-archive .language-toggle{padding:6px 7px;font-size:8px}}
       `;
       document.head.append(style);
     }
